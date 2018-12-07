@@ -5,7 +5,7 @@
 //click si se está clickeando el canvas
 //escala si es grande mayor zoom
 // alto y ancho tamaño de la ventana
-var n_funciones=1;
+var n_funciones=0;
 var color= new Array();
 color[0]="rgba(250, 120, 200, 0.75)";
 color[1]="rgba(200, 250, 120, 0.75)";
@@ -36,7 +36,7 @@ function funcion(x, n){
 
         if(i==n){
            
-           if(F[n]=="x"){ y=x*x   }else if(F[n]=="sin"){ y=Math.sin(x)  }else {
+           if(F[n]=="x"){ y=Math.tan(x)  }else if(F[n]!="" && F[n]!="undefined"){ y=Math.pow(x, n);  }else {
            	y=NaN;
            }
 
@@ -295,6 +295,8 @@ function fijar_centradoy(){
 }
 //fin funciones para fijar datos
 
+
+
 function dibujar()
 {
 	var x,y ,x1, y1, x2, y2, exactitud, n1=0, lienzo;
@@ -334,15 +336,17 @@ function dibujar()
 		    y1[h]=funcion(x1,h);
 
 		    if(y1[h]!=NaN){
-
+           
 				y2[h]=YtoY1(false, (y1[h]-centradoy));			   
 				Y[h][n1]=y2[h];
-			  
+			   
 				if(n1>0)
-			    {
-			    	var dx= x2-X[n1-1], dy=y2-Y[h][n1-1];
+			    { 
+			    	var dx= x2-X[n1-1], dy=y2[h]-Y[h][n1-1];// if(h==0 && n_funciones==2){ alert("x2="+x2+" dy="+dy+" y2="+y2+" "+Y[h][n1-1]); }
 					if(Math.sqrt(dx*dx+dy*dy)>1 && Math.sqrt(dx*dx+dy*dy)<alto-10)
 					{
+                    
+
 					//	alert(Math.sqrt(dx*dx+dy*dy));
 					//	alert(X[n1-1]+" "+Y[h][n1-1]);
 					    lienzo.moveTo(X[n1-1],Y[h][n1-1]);
