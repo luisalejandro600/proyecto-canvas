@@ -7,12 +7,12 @@
 // alto y ancho tamaño de la ventana
 var n_funciones=1;
 var color= new Array();
-color[0]="rgba(120, 250, 200, 1)";
-color[1]="rgba(250, 120, 200, 0.75)";
+color[0]="rgba(250, 120, 200, 0.75)";
+color[1]="rgba(200, 250, 120, 0.75)";
 color[2]="rgba(250, 200, 120, 0.75)";
 color[3]="rgba(120, 200, 250, 0.75)";
 color[4]="rgba(200, 120, 250, 0.75)";
-color[5]="rgba(200, 250, 120, 0.75)";
+color[5]="rgba(120, 250, 200, 1)";
 var anclajex=0, anclajey=0, distanciax=0, distanciay=0;
 var centradox=0, centradoy=0 ;
 var c;
@@ -36,7 +36,7 @@ function funcion(x, n){
 
         if(i==n){
            
-           if(F[n]=="x"){ y=Math.floor(x) }else {
+           if(F[n]=="x"){ y=x*x   }else if(F[n]=="sin"){ y=Math.sin(x)  }else {
            	y=NaN;
            }
 
@@ -144,7 +144,8 @@ p.addEventListener("mouseup", function (){
 	try {
 		let c= p.cloneNode(true);
 		p.parentNode.replaceChild(c, p);
-		centradox-=distanciax; centradoy-=distanciay;	click=false;  info.innerHTML=""+click; comenzar();
+		centradox-=distanciax; centradoy-=distanciay;	click=false;  info.innerHTML=""+click; centradox=Math.round(centradox), centradoy=Math.round(centradoy);
+		comenzar();
 
 	} catch(e) {
 		// statements
@@ -152,10 +153,43 @@ p.addEventListener("mouseup", function (){
 	}
 } , false);
 //fin Event Listener
+//cuadriculado
+lienzo.beginPath();
 
+lienzo.lineWidth=1;
+lienzo.strokeStyle="rgba(180, 220, 220, 1)";
+
+var linea= Math.pow(5, Math.floor(Math.log((100/escala))/Math.log(5)))
+
+var cx=XtoX1(false, -centradox), cy=YtoY1(false, -centradoy);
+
+for(var i=XtoX1(true, cx)+centradox; i<XtoX1(true, ancho)+centradox; i+= linea ){
+var n= i;
+lienzo.moveTo(XtoX1(false,n- centradox),0);
+lienzo.lineTo(XtoX1(false,n- centradox),alto);
+}
+for(var i=XtoX1(true, cx)+centradox; i>XtoX1(true, 0)+centradox; i-=linea ){
+var n= i;
+lienzo.moveTo(XtoX1(false,n- centradox),0);
+lienzo.lineTo(XtoX1(false,n- centradox),alto);
+}
+//dibujar numeros eje y
+for(var i=YtoY1(true, cy)+centradoy; i<YtoY1(true, 0)+centradoy; i+=linea ){
+var n= i;
+lienzo.moveTo(0, YtoY1(false,n- centradoy));
+lienzo.lineTo(ancho, YtoY1(false,n- centradoy));
+}
+for(var i=YtoY1(true, cy)+centradoy; i>YtoY1(true, alto)+centradoy; i-=linea ){
+var n= i;
+lienzo.moveTo(0, YtoY1(false,n- centradoy));
+lienzo.lineTo(ancho, YtoY1(false,n- centradoy));
+}
+lienzo.stroke();
+
+//fin cuadriculado
 //dibujar ejes
 lienzo.beginPath();
-lienzo.strokeStyle="#B6D8E3";
+lienzo.strokeStyle="rgba(180, 220, 220, 1)";
 lienzo.lineWidth=4;
 lienzo.moveTo(0,YtoY1(false,-centradoy));
 lienzo.lineTo(ancho,YtoY1(false,-centradoy));
@@ -182,20 +216,22 @@ pctx.font = ' 16px small-caption';
 pctx.lineWidth=2;
 pctx.strokeStyle="#312929";
 //dibujar numeros eje x
-for(var i=XtoX1(true, ancho/2)+centradox+Math.round(100/escala); i<XtoX1(true, ancho)+centradox; i+= Math.round(100/escala) ){
+var cx=XtoX1(false, -centradox), cy=YtoY1(false, -centradoy);
+
+for(var i=XtoX1(true, cx)+centradox; i<XtoX1(true, ancho)+centradox; i+= 100/escala ){
 var n= Math.round(i);
 pctx.strokeText(n,XtoX1(false,n- centradox)-4,YtoY1(false,-centradoy)+4);
 }
-for(var i=XtoX1(true, ancho/2)+centradox-Math.round(100/escala); i>XtoX1(true, 0)+centradox; i-=Math.round(100/escala) ){
+for(var i=XtoX1(true, cx)+centradox; i>XtoX1(true, 0)+centradox; i-=100/escala ){
 var n= Math.round(i);
 pctx.strokeText(n,XtoX1(false,n- centradox)-4,YtoY1(false,-centradoy)+4);
 }
 //dibujar numeros eje y
-for(var i=YtoY1(true, alto/2)+centradoy+Math.round(100/escala); i<YtoY1(true, 0)+centradoy; i+=Math.round(100/escala) ){
+for(var i=YtoY1(true, cy)+centradoy; i<YtoY1(true, 0)+centradoy; i+=100/escala ){
 var n= Math.round(i);
 pctx.strokeText(n,XtoX1(false,-centradox)-4,YtoY1(false,n- centradoy)+4);
 }
-for(var i=YtoY1(true, alto/2)+centradoy-Math.round(100/escala); i>YtoY1(true, alto)+centradoy; i-=Math.round(100/escala) ){
+for(var i=YtoY1(true, cy)+centradoy; i>YtoY1(true, alto)+centradoy; i-=100/escala ){
 var n= Math.round(i);
 pctx.strokeText(n,XtoX1(false,-centradox)-4,YtoY1(false,n- centradoy)+4);
 }
