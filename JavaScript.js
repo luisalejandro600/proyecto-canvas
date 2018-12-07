@@ -7,7 +7,7 @@
 // alto y ancho tamaño de la ventana
 var n_funciones=1;
 var color= new Array();
-color[0]="rgba(120, 250, 200, 0.75)";
+color[0]="rgba(120, 250, 200, 1)";
 color[1]="rgba(250, 120, 200, 0.75)";
 color[2]="rgba(250, 200, 120, 0.75)";
 color[3]="rgba(120, 200, 250, 0.75)";
@@ -36,7 +36,7 @@ function funcion(x, n){
 
         if(i==n){
            
-           if(F[n]=="x"){ y=Math.pow(x+c*n, n); }else {
+           if(F[n]=="x"){ y=Math.floor(x) }else {
            	y=NaN;
            }
 
@@ -95,14 +95,12 @@ ancho=elemento.width=window.innerWidth-300;
 p.height=alto;
 p.width=ancho;
 lateral.style.height=alto+"px";
-for(var i=0; i<n_funciones- htmlclassfuncion.length; i++){ htmlfunciones.innerHTML+="<input type='text' onkeyup = 'if(event.keyCode == 13) comenzar()' class='funcion' name='f1' value='' placeholder=''>"  }
+
+for(var i=0; i<n_funciones- htmlclassfuncion.length; i++){ htmlfunciones.innerHTML+="<input type='text' onkeyup = 'if(event.keyCode == 13) escribir()' class='funcion' name='f1' value='' placeholder=''>"  }
 df.innerHTML="";
 for(var i=0; i<n_funciones;i++){  df.innerHTML+="<canvas class='f' width='"+ancho+"' height='"+alto+"' >    </canvas>";    }
 for(var i=0; i<htmlclassfuncion.length; i++){ F[i]=htmlclassfuncion[i].value;    }
-//Event Listener
-htmlrango.removeEventListener("mousemove", escribir, false);
-htmlrango.addEventListener("mousemove", escribir, false);
-//fin Event Listener
+
 
 
 //funcion para el zoom
@@ -180,18 +178,26 @@ lienzo.stroke();
 
 //dibujar numeros ejes
 pctx.beginPath();
-pctx.font = ' 20px small-caption';
+pctx.font = ' 16px small-caption';
 pctx.lineWidth=2;
 pctx.strokeStyle="#312929";
 //dibujar numeros eje x
-for(var i=XtoX1(true, 0)+centradox; i<XtoX1(true, ancho)+centradox; i+=(100/escala)){
+for(var i=XtoX1(true, ancho/2)+centradox+Math.round(100/escala); i<XtoX1(true, ancho)+centradox; i+= Math.round(100/escala) ){
 var n= Math.round(i);
-pctx.strokeText(n,XtoX1(false,n- centradox)-5,YtoY1(false,-centradoy)+5);
+pctx.strokeText(n,XtoX1(false,n- centradox)-4,YtoY1(false,-centradoy)+4);
+}
+for(var i=XtoX1(true, ancho/2)+centradox-Math.round(100/escala); i>XtoX1(true, 0)+centradox; i-=Math.round(100/escala) ){
+var n= Math.round(i);
+pctx.strokeText(n,XtoX1(false,n- centradox)-4,YtoY1(false,-centradoy)+4);
 }
 //dibujar numeros eje y
-for(var i=YtoY1(true, alto)+centradoy; i<YtoY1(true, 0)+centradoy; i+=(100/escala)){
+for(var i=YtoY1(true, alto/2)+centradoy+Math.round(100/escala); i<YtoY1(true, 0)+centradoy; i+=Math.round(100/escala) ){
 var n= Math.round(i);
-pctx.strokeText(n,XtoX1(false,-centradox)-5,YtoY1(false,n- centradoy)+5);
+pctx.strokeText(n,XtoX1(false,-centradox)-4,YtoY1(false,n- centradoy)+4);
+}
+for(var i=YtoY1(true, alto/2)+centradoy-Math.round(100/escala); i>YtoY1(true, alto)+centradoy; i-=Math.round(100/escala) ){
+var n= Math.round(i);
+pctx.strokeText(n,XtoX1(false,-centradox)-4,YtoY1(false,n- centradoy)+4);
 }
 pctx.stroke();
 //fin dibujar numeros ejes
@@ -324,6 +330,7 @@ function dibujar()
 	    }	
 	    n1++;
 	}
+
 }
 // fin dibujar funcion
 function dibujar_punto(lienzo, x, n){
@@ -341,7 +348,7 @@ function agregar_funcion(){
 
 n_funciones++;
 
-var df=document.getElementById('df');
+	var df=document.getElementById('df');
 	var htmlfunciones=document.getElementById("funciones");
     var htmlclassfuncion= document.getElementsByClassName("funcion");
     for(var i=0; i<htmlclassfuncion.length; i++){ F[i]=htmlclassfuncion[i].value;    }
@@ -356,18 +363,35 @@ dibujar();
 
 }
 
+function reorganizar(){
+	var htmlclassfuncion= document.getElementsByClassName("funcion");
+	var htmlfunciones=document.getElementById("funciones");
+	var F1= new Array();
+	for(var i=0; i<htmlclassfuncion.length; i++){ F[i]=htmlclassfuncion[i].value; if(F[i]!="" && F[i]!="undefined"){  F1.push(F[i]) }   }
+	F=F1;
+    htmlfunciones.innerHTML="";
+    n_funciones=F.length;
+ 
+    for(var i=0; i<n_funciones; i++){ 
+		htmlfunciones.innerHTML+="<input type='text' onkeyup = 'if(event.keyCode == 13){   escribir()}' class='funcion' name='f1' value='' placeholder=''>"  
+	}
+	htmlclassfuncion= document.getElementsByClassName("funcion");
+    for(var i=0; i<htmlclassfuncion.length; i++){ htmlclassfuncion[i].value=F[i];  }
+}
+
 
 function escribir(){
-	var F1= new Array();
+	
+	reorganizar();
+	
 	var df=document.getElementById('df');
 	var htmlrango= document.getElementById("rango");
 	var htmlnrango= document.getElementById("nrango");
 	c= parseFloat( htmlrango.value) ;
 	htmlnrango.innerHTML=""+c;
 
-	var htmlclassfuncion= document.getElementsByClassName("funcion");
-    for(var i=0; i<htmlclassfuncion.length; i++){ F[i]=htmlclassfuncion[i].value; if(F[i]!=""){  F1.push(F[i]) }   }6y8y88yef
-	F=F1;
+	
+    
     
     df.innerHTML="";
 	for(var i=0; i<n_funciones ;i++){  df.innerHTML+="<canvas class='f' width='"+ancho+"' height='"+alto+"' >    </canvas>";  }
