@@ -96,7 +96,7 @@ p.height=alto;
 p.width=ancho;
 lateral.style.height=alto+"px";
 
-for(var i=0; i<n_funciones- htmlclassfuncion.length; i++){ htmlfunciones.innerHTML+="<input type='text' onkeyup = 'if(event.keyCode == 13) escribir()' class='funcion' name='f1' value='' placeholder=''>"  }
+for(var i=0; i<n_funciones- htmlclassfuncion.length; i++){ htmlfunciones.innerHTML+="<input type='text' onkeyup = 'if(event.keyCode == 13) {escribir();  hola();  }' class='funcion' name='f1' value='' placeholder=''>"  }
 df.innerHTML="";
 for(var i=0; i<n_funciones;i++){  df.innerHTML+="<canvas class='f' width='"+ancho+"' height='"+alto+"' >    </canvas>";    }
 for(var i=0; i<htmlclassfuncion.length; i++){ F[i]=htmlclassfuncion[i].value;    }
@@ -393,7 +393,7 @@ n_funciones++;
     var htmlclassfuncion= document.getElementsByClassName("funcion");
     for(var i=0; i<htmlclassfuncion.length; i++){ F[i]=htmlclassfuncion[i].value;    }
 	for(var i=0; i<n_funciones- htmlclassfuncion.length; i++){ 
-		htmlfunciones.innerHTML+="<input type='text' onkeyup = 'if(event.keyCode == 13){   escribir()}' class='funcion' name='f1' value='' placeholder=''>"  
+		htmlfunciones.innerHTML+="<input type='text' onkeyup = 'if(event.keyCode == 13){   escribir(); hola();}' class='funcion' name='f1' value='' placeholder=''>"  
 	}
 
 	df.innerHTML="";
@@ -413,7 +413,7 @@ function reorganizar(){
     n_funciones=F.length;
  
     for(var i=0; i<n_funciones; i++){ 
-		htmlfunciones.innerHTML+="<input type='text' onkeyup = 'if(event.keyCode == 13){   escribir()}' class='funcion' name='f1' value='' placeholder=''>"  
+		htmlfunciones.innerHTML+="<input type='text' onkeyup = 'if(event.keyCode == 13){   escribir();  hola();}' class='funcion' name='f1' value='' placeholder=''>"  
 	}
 	htmlclassfuncion= document.getElementsByClassName("funcion");
     for(var i=0; i<htmlclassfuncion.length; i++){ htmlclassfuncion[i].value=F[i];  }

@@ -6,6 +6,7 @@
 	<link rel="stylesheet" href="style.css">
 	<script src="JavaScript.js" type="text/javascript" charset="utf-8"></script>
 	<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+	<script src="hola.js" type="text/javascript" charset="utf-8" async defer></script>
 </head>
 <body>
 	
@@ -19,7 +20,7 @@
 	<div id="formulario" >
 		<div class="data0">
 			<div class="textdata0">Escala</div>
-			<input  value="100" onkeyup = "if(event.keyCode == 13) fijar_escala()"  id="escala" class="infodata0" type="number" min="0.0000001" step="any" max="1000" name="escala" value="Escala">   
+			<input  value="100" onkeyup = "if(event.keyCode == 13) {fijar_escala() ;hola()  } "  id="escala" class="infodata0" type="number" min="0.0000001" step="any" max="1000" name="escala" value="Escala">   
 	    </div>
 	    <div class="data0">
 			<div class="textdata0">Centrado</div>
@@ -37,7 +38,7 @@
 	     <input type="range" onmousemove="escribir()" class="info2" id="rango" name="rango" min="-5" max="5" step="1" value="0.5" >
 	    </div>
 	</div> 
-
+    <div id="rpg">  <div>
 	<div id="funciones">
  
 
