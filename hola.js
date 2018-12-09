@@ -14,17 +14,25 @@ function hola() {
     for(var i=0; i<F[0].length; i++  ){
 	    var l= F[0].charAt(i), l1; if(i>0){ l1=F[0].charAt(i-1) }
 
-	 	if( tipo(l)==1 || (v==0 && l=="-" && cola[0]==undefined)|| ( l=="-" && !b && tipo(l1)==2) ){   if(!b){ cola.push(l); b=true; }else{cola[v]+=l; }            } 
+	 	if( tipo(l)==1 || (v==0 && l=="-" && cola[0]==undefined)|| ( l=="-" && !b && tipo(l1)==2 && l1!=")") ){
+	 		if(!b){  cola.push(l); b=true; }else if(tipo(l)==1) {cola[v]+=l; if(l=="0"){alert(l+""+l1);}  }            
+	 	} 
 	 	else if( tipo(l)==2 ){
 		 	b=false; v++;
-           
+            if(l=="("){  stack.push(l); v--; continue;   }else if(l==")") {
+            	for (var h = stack.length-1; h >=0 ; h--) {
+            		if(stack[h]=="("){  stack.pop(); v--; break; }
+    				cola.push(stack[h]); stack.pop(); v++;
+    			}
+            }
 		    for (var h = stack.length - 1; h >= 0; h--) {
+		    	if(stack[h]=="("){ break;   } 
 		    	
 		  		if( rango(l)<=rango(stack[h])){    cola.push(stack[h]); stack.pop(); v++; }
 		  		
 		    }
-
-		    stack.push(l);
+            if(l!=")"){stack.push(l);}
+		    
 	 	}
     }
     
@@ -33,7 +41,7 @@ function hola() {
     	cola.push(stack[i]);
     }
     var cadena="";
-    for (var i = 0; i < cola.length; i++) { cadena+=" "+cola[i];    }
+    for (var i = 0; i < cola.length; i++) {  cadena+=" "+cola[i];    }
          
          alert(cadena);
  }
