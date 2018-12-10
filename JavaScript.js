@@ -25,7 +25,7 @@ var F= new Array();
 
 // funciones
 function funcion(x, n){
-  
+
 	var v1, v2, r;
 	var cola= new Array();
 	
@@ -36,19 +36,21 @@ function funcion(x, n){
      
 	if(Math.abs(x)>h && FA.length>0)
 	{
-        
+         
 		cola=FA[n].slice();
+		// if(FA.length==4){ alert("hola"+n); }
 		while (cola.length!=1) {
-			//alert("z "+cola.length+" "+t+" "+cola[t]+" "+cola[1+t]+" "+cola[2+t]+" "+(!isNaN(cola[0+t]) || tipo(cola[0+t])==3) +" "+ (tipo(cola[1+t])==1 || tipo(cola[1+t])==3) +" "+ (tipo(cola[2+t])==2 ));
+			//alert("z "+x+" "+cola.length+" "+t+" "+cola[t]+" "+cola[1+t]+" "+cola[2+t]+" "+(!isNaN(cola[0+t]) || tipo(cola[0+t])==3) +" "+ (tipo(cola[1+t])==1 || tipo(cola[1+t])==3) +" "+ (tipo(cola[2+t])==2 ));
 	        if( (!isNaN(cola[0+t]) || tipo(cola[0+t])==3) && (!isNaN(cola[1+t]) || tipo(cola[1+t])==3) && (tipo(cola[2+t])==2 ) ){
-	        	if(cola[0+t]=="x"){ v1=x;  }else{ v1=parseFloat(cola[0+t]);  }
-	        	if(cola[1+t]=="x"){ v2=x;  }else{ v2=parseFloat(cola[1+t]);  }
-                 
-                if(cola[2+t]=="+"){  r=""+(v1+v2); }
-                if(cola[2+t]=="-"){  r=""+(v1-v2); }
-                if(cola[+t]=="*"){  r=""+(v1*v2); }
+	        	if(cola[0+t]=="x"){ v1=x;  }else if(cola[0+t]=="-x"){v1=-x;}else{ v1=parseFloat(cola[0+t]);  }
+	        	if(cola[1+t]=="x"){ v2=x;  }else if(cola[1+t]=="-x"){v1=-x;}else{ v2=parseFloat(cola[1+t]);  }
+                
+                if(cola[2+t]=="+"){  r=""+(v1+v2);  }
+                if(cola[2+t]=="-"){  r=""+(v1-v2);  }
+                if(cola[2+t]=="*"){  r=""+(v1*v2);  }
                 if(cola[2+t]=="/"){  r=""+(v1/v2); }
-                if(cola[2+t]=="^"){  r=""+(Math.pow(v1, v2)); }
+                if(cola[2+t]=="^"){  r=""+(Math.pow(v1, v2));  }
+              //  if(t==1){ alert("w " +v1+" "+v2+" "+r); }
                // for(var i=0; i<cola.length; i++){ alert("w "+cola[i]);  }
               cola.splice(t,3, r);    t=0;
                // for(var i=0; i<cola.length; i++){ alert("y "+cola[i]);  }
@@ -217,7 +219,6 @@ lienzo.stroke();
 
 //dibujar funciones
 if(document.getElementsByClassName("f").length>0){dibujar();}
-
 //fin dibujar funciones
 
 //dibujar punto c
@@ -383,7 +384,7 @@ function dibujar()
 		    	{
 		            for(var j=h-1; j>=0; j--){
 			            // if(x1>0.95 && x1<1.05){ alert(y1[h]+""+y1[j]+""+(y1[h]-y1[j])) }
-			            if( Math.abs(y1[h]-y1[j])<escala/10000 ){ dibujar_punto(lienzo, x1, h) }// puntos
+			            if( Math.abs(y1[h]-y1[j])<escala/10000 ){ dibujar_punto(x1, h) }// puntos
 		            }
 	            }                      
 		    }	
@@ -394,15 +395,16 @@ function dibujar()
 
 }
 // fin dibujar funcion
-function dibujar_punto(lienzo, x, n){
-	/*
-lienzo.beginPath();
-lienzo.strokeStyle="#392929";
-lienzo.arc(XtoX1(false, x-centradox),YtoY1(false, funcion(x, n)-centradoy), 4, 0, 2*Math.PI, true );
-lienzo.fillStyle="#E46BAA";
-lienzo.fill();
-lienzo.stroke();
-*/
+function dibujar_punto(x, n){
+var p= document.getElementById("p");
+var pctx=p.getContext("2d");
+pctx.beginPath();
+pctx.strokeStyle="#392929";
+pctx.arc(XtoX1(false, x-centradox),YtoY1(false, funcion(x, n)-centradoy), 4, 0, 2*Math.PI, true );
+pctx.fillStyle="#E46BAA";
+pctx.fill();
+pctx.stroke();
+
 }
 
 function agregar_funcion(){

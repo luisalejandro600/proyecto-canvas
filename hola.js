@@ -1,11 +1,16 @@
 var FA= new Array();
-
+var cola, stack, v;
+cola= new Array();
+stack= new Array();
 function hola() {
+
+	v=0;
+	
 	for (var a = 0; a < F.length; a++) {
-		
-		var stack, cola, b=false, v=0; var espacios="";
 		cola= new Array();
-		stack= new Array();
+         stack= new Array();
+		var b=false, espacios="";
+		
 	   
 		for (var i = 0; i < F[a].length; i++) {
 			
@@ -17,24 +22,19 @@ function hola() {
 	  //5-3*10-10*2   5 3 10 *0 - 1 2 * -
 	    for(var i=0; i<F[a].length; i++  ){
 		    var l= F[a].charAt(i), l1; if(i>0){ l1=F[a].charAt(i-1) }
-
+            
 		 	if( tipo(l)==1 || (v==0 && l=="-" && cola[0]==undefined)|| ( l=="-" && !b && tipo(l1)==2 && l1!=")") ){
 		 		if(!b){  cola.push(l); b=true; }else if(tipo(l)==1) {cola[v]+=l;  }            
 		 	} 
 		 	else if( tipo(l)==2 ){
 			 	b=false; v++;
-	            if(l=="("){  stack.push(l); v--; continue;   }else if(l==")") {
+	            if(l=="("){ if(l1=="-" && v==1){l1=cola[v-1]="-1"}  if(!isNaN(l1)){ if(v!=1){ poner_stack(0); stack.push("+") }   poner_stack(1); stack.push("*"); }  stack.push(l); v--; continue;   }else if(l==")") {
 	            	for (var h = stack.length-1; h >=0 ; h--) {
 	            		if(stack[h]=="("){  stack.pop(); v--; break; }
 	    				cola.push(stack[h]); stack.pop(); v++;
 	    			}
 	            }
-			    for (var h = stack.length - 1; h >= 0; h--) {
-			    	if(stack[h]=="("){ break;   } 
-			    	
-			  		if( rango(l)<=rango(stack[h])){    cola.push(stack[h]); stack.pop(); v++; }
-			  		
-			    }
+			    poner_stack(rango(l));
 	            if(l!=")"){stack.push(l);}
 			    
 		 	}else if(tipo(l)==3){
@@ -51,6 +51,7 @@ function hola() {
 	    	cola.push(stack[i]);
 	    }
 	    FA[a]=cola;
+        
 	    /*
 	    var cadena="";
 	    for (var i = 0; i < cola.length; i++) {  cadena+=" "+cola[i];    }
@@ -70,7 +71,7 @@ function tipo (letra) {
 	} else if (letra=="+" || letra=="-" || letra==")" || letra=="(" || letra=="*" || letra=="/" || letra=="^") {
 		return 2;
 	}
-	else if(letra=="x"){
+	else if(letra=="x" || letra=="-x"){
 		return 3;
 	}
 	else {
@@ -84,5 +85,15 @@ function rango (letra) {
   }
 }
 
+function poner_stack(n){
+
+	for (var h = stack.length - 1; h >= 0; h--) {
+		if(stack[h]=="("){ break;   } 
+			    	
+	    if( n<=rango(stack[h])){    cola.push(stack[h]); stack.pop(); v++; }
+			  		
+    }
+
+}
 
 
