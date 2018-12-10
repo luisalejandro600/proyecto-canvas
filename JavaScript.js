@@ -25,24 +25,41 @@ var F= new Array();
 
 // funciones
 function funcion(x, n){
+  
+	var v1, v2, r;
+	var cola= new Array();
+	
+	var t=0;
 	var y=0;
     var h=0.000001;
-
-	if(Math.abs(x)>h)
+    var bool=false;
+     
+	if(Math.abs(x)>h && FA.length>0)
 	{
-		
+        
+		cola=FA[n].slice();
+		while (cola.length!=1) {
+			//alert("z "+cola.length+" "+t+" "+cola[t]+" "+cola[1+t]+" "+cola[2+t]+" "+(!isNaN(cola[0+t]) || tipo(cola[0+t])==3) +" "+ (tipo(cola[1+t])==1 || tipo(cola[1+t])==3) +" "+ (tipo(cola[2+t])==2 ));
+	        if( (!isNaN(cola[0+t]) || tipo(cola[0+t])==3) && (!isNaN(cola[1+t]) || tipo(cola[1+t])==3) && (tipo(cola[2+t])==2 ) ){
+	        	if(cola[0+t]=="x"){ v1=x;  }else{ v1=parseFloat(cola[0+t]);  }
+	        	if(cola[1+t]=="x"){ v2=x;  }else{ v2=parseFloat(cola[1+t]);  }
+                 
+                if(cola[2+t]=="+"){  r=""+(v1+v2); }
+                if(cola[2+t]=="-"){  r=""+(v1-v2); }
+                if(cola[+t]=="*"){  r=""+(v1*v2); }
+                if(cola[2+t]=="/"){  r=""+(v1/v2); }
+                if(cola[2+t]=="^"){  r=""+(Math.pow(v1, v2)); }
+               // for(var i=0; i<cola.length; i++){ alert("w "+cola[i]);  }
+              cola.splice(t,3, r);    t=0;
+               // for(var i=0; i<cola.length; i++){ alert("y "+cola[i]);  }
+                if(isNaN(r)){ return NaN; }
+	        }else {
+	        	t++;
+	        }
 
-        for(var i=0; i<n_funciones; i++){
+		}
 
-        if(i==n){
-           
-           if(F[n]=="x"){ y=Math.tan(x)  }else if(F[n]!="" && F[n]!="undefined"){ y=Math.pow(x, n);  }else {
-           	y=NaN;
-           }
-
-        }
-
-        }
+        if(cola.length==1){ if(cola[0]=="x"){ y=x;  }else if(cola[0]=="-x"){ y=-x }else{ y=parseFloat(cola[0]);}   }
 
 
 		return y;
@@ -96,7 +113,7 @@ p.height=alto;
 p.width=ancho;
 lateral.style.height=alto+"px";
 
-for(var i=0; i<n_funciones- htmlclassfuncion.length; i++){ htmlfunciones.innerHTML+="<input type='text' onkeyup = 'if(event.keyCode == 13) {escribir();  hola();  }' class='funcion' name='f1' value='' placeholder=''>"  }
+for(var i=0; i<n_funciones- htmlclassfuncion.length; i++){ htmlfunciones.innerHTML+="<input type='text' onkeyup = 'if(event.keyCode == 13) {escribir();  }' class='funcion' name='f1' value='' placeholder=''>"  }
 df.innerHTML="";
 for(var i=0; i<n_funciones;i++){  df.innerHTML+="<canvas class='f' width='"+ancho+"' height='"+alto+"' >    </canvas>";    }
 for(var i=0; i<htmlclassfuncion.length; i++){ F[i]=htmlclassfuncion[i].value;    }
@@ -199,7 +216,8 @@ lienzo.stroke();
 //fin dibujar ejes
 
 //dibujar funciones
-dibujar();
+if(document.getElementsByClassName("f").length>0){dibujar();}
+
 //fin dibujar funciones
 
 //dibujar punto c
@@ -299,77 +317,80 @@ function fijar_centradoy(){
 
 function dibujar()
 {
-	var x,y ,x1, y1, x2, y2, exactitud, n1=0, lienzo;
-	
-    var f=document.getElementsByClassName('f');
+	if(n_funciones>0){
+		var x,y ,x1, y1, x2, y2, exactitud, n1=0, lienzo;
+		
+	    var f=document.getElementsByClassName('f');
 
-    
-	y=y1=y2= new Array();
+	    
+		y=y1=y2= new Array();
 
-	if(escala>100){exactitud=0.1}
-	else{ exactitud=escala/definicion }
+		if(escala>100){exactitud=0.1}
+		else{ exactitud=escala/definicion }
 
-	//dibujar funcion
-	var X= new Array();
-	var Y= new Array(n_funciones);
+		//dibujar funcion
+		var X= new Array();
+		var Y= new Array(n_funciones);
 
-	for (var i =0; i <n_funciones; i++) {
-		Y[i]= new Array();
-	}
+		for (var i =0; i <n_funciones; i++) {
+			Y[i]= new Array();
+		}
 
-	for(var i=XtoX1(false,  XtoX1(true, 0)+centradox); i<ancho-XtoX1(false,  XtoX1(true, 0)-centradox);i+=exactitud)
-	{
-		x=i;
-		x1=XtoX1(true, x);
-	    x2=XtoX1(false, (x1-centradox));
-        X[n1]=x2;
+		for(var i=XtoX1(false,  XtoX1(true, 0)+centradox); i<ancho-XtoX1(false,  XtoX1(true, 0)-centradox);i+=exactitud)
+		{
+			x=i;
+			x1=XtoX1(true, x);
+		    x2=XtoX1(false, (x1-centradox));
+	        X[n1]=x2;
 
-	    for (var h = 0; h <n_funciones ; h++) 
-	    {
-            lienzo=f[h].getContext("2d");
-              
-	        lienzo.beginPath();
-			lienzo.lineWidth=3;
-        	lienzo.strokeStyle=color[h];
-			lienzo.lineCap="round";
-			lienzo.lineJoin="miter";			
-		    y1[h]=funcion(x1,h);
+		    for (var h = 0; h <n_funciones ; h++) 
+		    {
+	            lienzo=f[h].getContext("2d");
+	              
+		        lienzo.beginPath();
+				lienzo.lineWidth=3;
+	        	lienzo.strokeStyle=color[h];
+				lienzo.lineCap="round";
+				lienzo.lineJoin="miter";			
+			    y1[h]=funcion(x1,h);
 
-		    if(y1[h]!=NaN){
-           
-				y2[h]=YtoY1(false, (y1[h]-centradoy));			   
-				Y[h][n1]=y2[h];
-			   
-				if(n1>0)
-			    { 
-			    	var dx= x2-X[n1-1], dy=y2[h]-Y[h][n1-1];// if(h==0 && n_funciones==2){ alert("x2="+x2+" dy="+dy+" y2="+y2+" "+Y[h][n1-1]); }
-					if(Math.sqrt(dx*dx+dy*dy)>1 && Math.sqrt(dx*dx+dy*dy)<alto-10)
-					{
-                    
+			    if(y1[h]!=NaN){
+	           
+					y2[h]=YtoY1(false, (y1[h]-centradoy));			   
+					Y[h][n1]=y2[h];
+				   
+					if(n1>0)
+				    { 
+				    	var dx= x2-X[n1-1], dy=y2[h]-Y[h][n1-1];// if(h==0 && n_funciones==2){ alert("x2="+x2+" dy="+dy+" y2="+y2+" "+Y[h][n1-1]); }
+						if(Math.sqrt(dx*dx+dy*dy)>1 && Math.sqrt(dx*dx+dy*dy)<alto-10)
+						{
+	                    
 
-					//	alert(Math.sqrt(dx*dx+dy*dy));
-					//	alert(X[n1-1]+" "+Y[h][n1-1]);
-					    lienzo.moveTo(X[n1-1],Y[h][n1-1]);
-				    	lienzo.lineTo(x2+1,y2[h]+1);
+						//	alert(Math.sqrt(dx*dx+dy*dy));
+						//	alert(X[n1-1]+" "+Y[h][n1-1]);
+						    lienzo.moveTo(X[n1-1],Y[h][n1-1]);
+					    	lienzo.lineTo(x2+1,y2[h]+1);
+					    }
 				    }
-			    }
-						    
-				lienzo.moveTo(x2,y2[h]);
-				lienzo.lineTo(x2+1,y2[h]+1);
-			}
+							    
+					lienzo.moveTo(x2,y2[h]);
+					lienzo.lineTo(x2+1,y2[h]+1);
+				}
 
-			lienzo.stroke();
-							//dibujar inetersecciones
-            if(h>0)
-	    	{
-	            for(var j=h-1; j>=0; j--){
-		            // if(x1>0.95 && x1<1.05){ alert(y1[h]+""+y1[j]+""+(y1[h]-y1[j])) }
-		            if( Math.abs(y1[h]-y1[j])<escala/10000 ){ dibujar_punto(lienzo, x1, h) }// puntos
-	            }
-            }                      
-	    }	
-	    n1++;
+				lienzo.stroke();
+								//dibujar inetersecciones
+	            if(h>0)
+		    	{
+		            for(var j=h-1; j>=0; j--){
+			            // if(x1>0.95 && x1<1.05){ alert(y1[h]+""+y1[j]+""+(y1[h]-y1[j])) }
+			            if( Math.abs(y1[h]-y1[j])<escala/10000 ){ dibujar_punto(lienzo, x1, h) }// puntos
+		            }
+	            }                      
+		    }	
+		    n1++;
+		}
 	}
+	
 
 }
 // fin dibujar funcion
@@ -393,7 +414,7 @@ n_funciones++;
     var htmlclassfuncion= document.getElementsByClassName("funcion");
     for(var i=0; i<htmlclassfuncion.length; i++){ F[i]=htmlclassfuncion[i].value;    }
 	for(var i=0; i<n_funciones- htmlclassfuncion.length; i++){ 
-		htmlfunciones.innerHTML+="<input type='text' onkeyup = 'if(event.keyCode == 13){   escribir(); hola();}' class='funcion' name='f1' value='' placeholder=''>"  
+		htmlfunciones.innerHTML+="<input type='text' onkeyup = 'if(event.keyCode == 13){   escribir(); }' class='funcion' name='f1' value='' placeholder=''>"  
 	}
 
 	df.innerHTML="";
@@ -413,7 +434,7 @@ function reorganizar(){
     n_funciones=F.length;
  
     for(var i=0; i<n_funciones; i++){ 
-		htmlfunciones.innerHTML+="<input type='text' onkeyup = 'if(event.keyCode == 13){   escribir();  hola();}' class='funcion' name='f1' value='' placeholder=''>"  
+		htmlfunciones.innerHTML+="<input type='text' onkeyup = 'if(event.keyCode == 13){   escribir(); }' class='funcion' name='f1' value='' placeholder=''>"  
 	}
 	htmlclassfuncion= document.getElementsByClassName("funcion");
     for(var i=0; i<htmlclassfuncion.length; i++){ htmlclassfuncion[i].value=F[i];  }
@@ -435,7 +456,10 @@ function escribir(){
     
     df.innerHTML="";
 	for(var i=0; i<n_funciones ;i++){  df.innerHTML+="<canvas class='f' width='"+ancho+"' height='"+alto+"' >    </canvas>";  }
-
+    
+	 
+    hola();
+   
 	dibujar();
 
 

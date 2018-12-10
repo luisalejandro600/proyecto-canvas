@@ -1,50 +1,66 @@
+var FA= new Array();
+
 function hola() {
-	var stack, cola, b=false, v=0; var espacios="";
-	cola= new Array();
-	stack= new Array();
-
-	for (var i = 0; i < F[0].length; i++) {
+	for (var a = 0; a < F.length; a++) {
 		
-		if(F[0].charAt(i)==" "){continue;}
-		espacios+=F[0].charAt(i);
-		
-	}
-    F[0]=espacios;
-  //5-3*10-10*2   5 3 10 *0 - 1 2 * -
-    for(var i=0; i<F[0].length; i++  ){
-	    var l= F[0].charAt(i), l1; if(i>0){ l1=F[0].charAt(i-1) }
+		var stack, cola, b=false, v=0; var espacios="";
+		cola= new Array();
+		stack= new Array();
+	   
+		for (var i = 0; i < F[a].length; i++) {
+			
+			if(F[a].charAt(i)==" "){continue;}
+			espacios+=F[a].charAt(i);
+			
+		}
+	    F[a]=espacios;
+	  //5-3*10-10*2   5 3 10 *0 - 1 2 * -
+	    for(var i=0; i<F[a].length; i++  ){
+		    var l= F[a].charAt(i), l1; if(i>0){ l1=F[a].charAt(i-1) }
 
-	 	if( tipo(l)==1 || (v==0 && l=="-" && cola[0]==undefined)|| ( l=="-" && !b && tipo(l1)==2 && l1!=")") ){
-	 		if(!b){  cola.push(l); b=true; }else if(tipo(l)==1) {cola[v]+=l; if(l=="0"){alert(l+""+l1);}  }            
-	 	} 
-	 	else if( tipo(l)==2 ){
-		 	b=false; v++;
-            if(l=="("){  stack.push(l); v--; continue;   }else if(l==")") {
-            	for (var h = stack.length-1; h >=0 ; h--) {
-            		if(stack[h]=="("){  stack.pop(); v--; break; }
-    				cola.push(stack[h]); stack.pop(); v++;
-    			}
-            }
-		    for (var h = stack.length - 1; h >= 0; h--) {
-		    	if(stack[h]=="("){ break;   } 
-		    	
-		  		if( rango(l)<=rango(stack[h])){    cola.push(stack[h]); stack.pop(); v++; }
-		  		
-		    }
-            if(l!=")"){stack.push(l);}
-		    
-	 	}
-    }
-    
-    
-    for (var i = stack.length-1; i >=0 ; i--) {
-    	cola.push(stack[i]);
-    }
-    var cadena="";
-    for (var i = 0; i < cola.length; i++) {  cadena+=" "+cola[i];    }
-         
-         alert(cadena);
- }
+		 	if( tipo(l)==1 || (v==0 && l=="-" && cola[0]==undefined)|| ( l=="-" && !b && tipo(l1)==2 && l1!=")") ){
+		 		if(!b){  cola.push(l); b=true; }else if(tipo(l)==1) {cola[v]+=l;  }            
+		 	} 
+		 	else if( tipo(l)==2 ){
+			 	b=false; v++;
+	            if(l=="("){  stack.push(l); v--; continue;   }else if(l==")") {
+	            	for (var h = stack.length-1; h >=0 ; h--) {
+	            		if(stack[h]=="("){  stack.pop(); v--; break; }
+	    				cola.push(stack[h]); stack.pop(); v++;
+	    			}
+	            }
+			    for (var h = stack.length - 1; h >= 0; h--) {
+			    	if(stack[h]=="("){ break;   } 
+			    	
+			  		if( rango(l)<=rango(stack[h])){    cola.push(stack[h]); stack.pop(); v++; }
+			  		
+			    }
+	            if(l!=")"){stack.push(l);}
+			    
+		 	}else if(tipo(l)==3){
+		 		
+	        if(!b){  cola.push(l); }else if(l1=="-") { cola[v]+=l; }else if(tipo(l1)==1) {
+	        	cola.push(l); v++; cola.push("*"); v++;
+	        }
+
+		 	}
+	    }
+	    
+	    
+	    for (var i = stack.length-1; i >=0 ; i--) {
+	    	cola.push(stack[i]);
+	    }
+	    FA[a]=cola;
+	    /*
+	    var cadena="";
+	    for (var i = 0; i < cola.length; i++) {  cadena+=" "+cola[i];    }
+	         
+	         alert(cadena);*/
+	   }
+	   
+
+	
+}
  
   
 
