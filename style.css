@@ -191,6 +191,23 @@ margin-left: 4%;
 
 }
 
+
+
+.Latex{
+	border: 2px inset;
+	background-color: #FFFFFF;
+
+display: none;
+text-align: center;
+min-height: 15px;
+margin:auto;
+margin-top: 15px;
+width: 90%;
+margin-left: 4%;
+
+
+}
+
 .data2{
 	margin-left: 44%;
 margin-top: 5px;

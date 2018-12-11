@@ -115,7 +115,7 @@ p.height=alto;
 p.width=ancho;
 lateral.style.height=alto+"px";
 
-for(var i=0; i<n_funciones- htmlclassfuncion.length; i++){ htmlfunciones.innerHTML+="<input type='text' onkeyup = 'if(event.keyCode == 13) {escribir();  }' class='funcion' name='f1' value='' placeholder=''>"  }
+for(var i=0; i<n_funciones- htmlclassfuncion.length; i++){ htmlfunciones.innerHTML+="<div><div class='Latex' onclick='latex1(event)' ></div> <input type='text' onkeyup = 'if(event.keyCode == 13) {escribir(); }' class='funcion' name='f1' value='' placeholder=''></div>"  }
 df.innerHTML="";
 for(var i=0; i<n_funciones;i++){  df.innerHTML+="<canvas class='f' width='"+ancho+"' height='"+alto+"' >    </canvas>";    }
 for(var i=0; i<htmlclassfuncion.length; i++){ F[i]=htmlclassfuncion[i].value;    }
@@ -416,7 +416,7 @@ n_funciones++;
     var htmlclassfuncion= document.getElementsByClassName("funcion");
     for(var i=0; i<htmlclassfuncion.length; i++){ F[i]=htmlclassfuncion[i].value;    }
 	for(var i=0; i<n_funciones- htmlclassfuncion.length; i++){ 
-		htmlfunciones.innerHTML+="<input type='text' onkeyup = 'if(event.keyCode == 13){   escribir(); }' class='funcion' name='f1' value='' placeholder=''>"  
+		htmlfunciones.innerHTML+="<div><div class='Latex' onclick='latex1(event)' ></div> <input type='text' onkeyup = 'if(event.keyCode == 13){   escribir(); }' class='funcion' name='f1' value='' placeholder=''></div>"  
 	}
 
 	df.innerHTML="";
@@ -436,10 +436,14 @@ function reorganizar(){
     n_funciones=F.length;
  
     for(var i=0; i<n_funciones; i++){ 
-		htmlfunciones.innerHTML+="<input type='text' onkeyup = 'if(event.keyCode == 13){   escribir(); }' class='funcion' name='f1' value='' placeholder=''>"  
+		htmlfunciones.innerHTML+="<div><div class='Latex' onclick='latex1(event)' ></div> <input type='text' onkeyup = 'if(event.keyCode == 13){ escribir(); } ' class='funcion' name='f1' value='' placeholder=''></div>"  
 	}
 	htmlclassfuncion= document.getElementsByClassName("funcion");
-    for(var i=0; i<htmlclassfuncion.length; i++){ htmlclassfuncion[i].value=F[i];  }
+	var htmlclasslatex=document.getElementsByClassName("Latex");
+    for(var i=0; i<htmlclassfuncion.length; i++){ 
+    	htmlclassfuncion[i].value=F[i]; htmlclassfuncion[i].style.display = 'none'; htmlclasslatex[i].style.display = 'block';
+    	htmlclasslatex[i].innerHTML="<a href='https://www.codecogs.com/eqnedit.php?latex=x' target='_blank'><img style='margin-top:5px' src='https://latex.codecogs.com/gif.latex?"+F[i]+"' title='"+F[i]+"' /></a>";
+    }
 }
 
 
@@ -468,6 +472,18 @@ function escribir(){
 
 
 }
+
+
+function latex1 (e) {
+	
+
+     e.target.parentNode.lastChild.style.display = 'block';
+     e.target.style.display = 'none';
+	
+		
+	
+}
+
 
 //funciones para empezar
 window.addEventListener("load", comenzar, false);
