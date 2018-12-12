@@ -442,7 +442,8 @@ function reorganizar(){
 	var htmlclasslatex=document.getElementsByClassName("Latex");
     for(var i=0; i<htmlclassfuncion.length; i++){ 
     	htmlclassfuncion[i].value=F[i]; htmlclassfuncion[i].style.display = 'none'; htmlclasslatex[i].style.display = 'block';
-    	htmlclasslatex[i].innerHTML="<a href='https://www.codecogs.com/eqnedit.php?latex=x' target='_blank'><img style='margin-top:5px' src='https://latex.codecogs.com/gif.latex?"+F[i]+"' title='"+F[i]+"' /></a>";
+    	htmlclasslatex[i].innerHTML="<a href='https://www.codecogs.com/eqnedit.php?latex=x' target='_blank'><img style='margin-top:5px' src='https://latex.codecogs.com/gif.latex?"+LaTex(F[i])+"' title='"+F[i]+"' /></a>";
+    	// htmlclasslatex[i].innerHTML=F[i];
     }
 }
 
@@ -484,6 +485,62 @@ function latex1 (e) {
 	
 }
 
+function LaTex(F){
+var l, espacios="";
+l=new Array();
+	for (var i = 0; i < F.length; i++) {
+    l[0]=F.charAt(i);
+		if(l[0]==" "){continue;}
+		if(l[0]=="("){ l[0]="{";  }
+		if(l[0]==")"){ l[0]="}";  }
+		espacios+=l[0];		
+	}
+    F=espacios;
+   
+	for (var i = 0; i < F.length; i++) {
+
+    l[i]=F.charAt(i); 
+  
+    if(l[i]=="/"){
+    	alert("hola1");
+    	var si=1,sd=1,  cli=1, cld=1, li="", ld="";
+    	if(l[i-1]=="}"){alert("hola2");
+       		for(var h=i-2; h>=0; h--){ if(l[h]=="}"){ si++; } if(l[h]=="{"){si--;}    cli++; if(si<=0){ alert("1li="+li); break; } li+=l[h];  }
+    	}else {cli=0; alert("hola3 "+i);
+       		for(var h=i-1; h>=0; h--){ if(!isNaN(l[h]) || tipo(l[h])==3 ){ cli++; li+=l[h]; }else{  alert("2li="+li); break; }  }
+    	}
+        
+        if(F.charAt(i+1)=="{"){alert("hola4");
+       		for(var h=i+2; h<F.length; h++){ if(F.charAt(h)=="{"){ sd++; } if(F.charAt(h)=="}"){sd--;}    cld++;  alert("sd="+sd+" h="+h+" l[h]="+F.charAt(h)); if(sd<=0){ alert("1ld="+ld); break; } ld+=F.charAt(h);  }
+    	}else {cld=0; alert("hola5 "+i);
+       		for(var h=i+1; h<F.length; h++){ if(!isNaN(F.charAt(h)) || tipo(F.charAt(h))==3 ){ cld++; ld+=F.charAt(h); }else{  alert("2ld="+ld); break; }  }
+    	}
+
+    var r=" \\frac{"+li.split('').reverse().join('')+"}{"+ld+"} ";
+   var R= new Array();
+   R=F.split('');
+   R.splice(i-cli, 1+cld+cli, r);
+   F=R.join('');
+    
+    i+= (-(cli+1) + r.length); 
+     alert("r="+r+" F="+F+" i="+i+" cli="+cli+" cld="+cld+" r.length="+r.length);
+    }
+
+			
+	}
+    espacios="";
+	for (var i = 0; i < F.length; i++) {
+    l[0]=F.charAt(i);
+		if(l[0]==" "){continue;}
+	
+		espacios+=l[0];		
+	}
+    F=espacios;
+
+return F;
+
+
+}
 
 //funciones para empezar
 window.addEventListener("load", comenzar, false);
