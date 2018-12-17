@@ -1,34 +1,70 @@
 var FA= new Array();
+
 var cola, stack, v;
 cola= new Array();
 stack= new Array();
 function hola() {
 
-	v=0;
+ 
 	
 	for (var a = 0; a < F.length; a++) {
-		cola= new Array();
-         stack= new Array();
+	
+	    FA[a]=parser(F[a]);
+	   
+        
+	   
+	   }
+	   
+  
+	
+}
+
+function parser (F1) {
+	 cola= new Array();
+       stack= new Array();
 		var b=false, espacios="";
 		
 	   
-		for (var i = 0; i < F[a].length; i++) {
+		for (var i = 0; i < F1.length; i++) {
 			
-			if(F[a].charAt(i)==" "){continue;}
-			espacios+=F[a].charAt(i);
+			if(F1.charAt(i)==" "){continue;}
+			espacios+=F1.charAt(i);
 			
 		}
-	    F[a]=espacios;
+	    F1=espacios;
+        var f_especial= new Array();
+        var NF= new Array();
+
+        while (F1.indexOf("sqrt(")!=-1 && F1!="") {
+	        f_especial[0]=F1.indexOf("sqrt(");
+
+	        var i=parseFloat(f_especial[0]), nf=0, cadena="", s=1;
+	        if(nf==0){var hola=F1.split('');   hola.splice(i, 4); F1=hola.join('');  }
+
+	        for(var h=i+1; h<F1.length; h++){
+	        if(F1.charAt(h)=="("){s++;}
+	        if(F1.charAt(h)==")"){s--;}
+	        if(s==0){  var hola=F1.split('');  NF.push(parser(cadena)); NF[NF.length-1].unshift(nf); hola.splice(i, 2+cadena.length, "$"); F1=hola.join('');   break;  }
+	       	cadena+=F1.charAt(h);
+
+	        }
+	         cola= new Array();
+	         stack= new Array();
+	    //  alert("hola "+cadena+" nf="+nf+" F1="+F1+" i="+i+" NF="+NF+" cola="+cola);      
+       }
+
+       v=0;
 	  //5-3*10-10*2   5 3 10 *0 - 1 2 * -
-	    for(var i=0; i<F[a].length; i++  ){
-		    var l= F[a].charAt(i), l1; if(i>0){ l1=F[a].charAt(i-1) }
-            
+	    for(var i=0; i<F1.length; i++  ){
+		    var l= F1.charAt(i), l1; if(i>0){ l1=F1.charAt(i-1) }
+          
 		 	if( tipo(l)==1 || (v==0 && l=="-" && cola[0]==undefined)|| ( l=="-" && !b && tipo(l1)==2 && l1!=")") ){
-		 		if(!b){  cola.push(l); b=true; }else if(tipo(l)==1) {cola[v]+=l;  }            
+
+		 		if(!b){  cola.push(l); b=true;   }else if(tipo(l)==1) {cola[v]+=l;  }               
 		 	} 
 		 	else if( tipo(l)==2 ){
 			 	b=false; v++;
-	            if(l=="("){ if(l1=="-" && v==1){l1=cola[v-1]="-1"}  if(!isNaN(l1)){ if(v!=1){ poner_stack(0); stack.push("+") }   poner_stack(1); stack.push("*"); }  stack.push(l); v--; continue;   }else if(l==")") {
+	            if(l=="("){ if(l1=="-" && v==1){l1=cola[v-1]="-1"}  if(!isNaN(l1)|| tipo(l1)==3){ if(v!=1){ poner_stack(0); stack.push("+") }   poner_stack(1); stack.push("*"); }  stack.push(l); v--; continue;   }else if(l==")") {
 	            	for (var h = stack.length-1; h >=0 ; h--) {
 	            		if(stack[h]=="("){  stack.pop(); v--; break; }
 	    				cola.push(stack[h]); stack.pop(); v++;
@@ -39,7 +75,7 @@ function hola() {
 			    
 		 	}else if(tipo(l)==3){
 		 		
-	        if(!b){  cola.push(l); }else if(l1=="-") { cola[v]+=l; }else if(tipo(l1)==1) {
+	        if(!b){  cola.push(l); }else if(l1=="-") { cola[v]+=l;  }else if(tipo(l1)==1) {
 	        	cola.push(l); v++; cola.push("*"); v++;
 	        }
 
@@ -50,19 +86,19 @@ function hola() {
 	    for (var i = stack.length-1; i >=0 ; i--) {
 	    	cola.push(stack[i]);
 	    }
-	    FA[a]=cola;
-        
-	    /*
-	    var cadena="";
-	    for (var i = 0; i < cola.length; i++) {  cadena+=" "+cola[i];    }
-	         
-	         alert(cadena);*/
-	   }
-	   
+	    var c=0;
+        for(var i=0; i<cola.length; i++){
+        if(cola[i]=="$"){ cola[i]=NF[c]; c++;  }else if(cola[i]=="-$") {
+        	
+        	cola.splice(i, 1, "-1" ,NF[c], "*");
+        	//alert("were "+cola);
+        	i+=2;
+        }
 
-	
+        }
+    //alert("cola="+cola+" F1="+F1);
+	    return cola; 
 }
- 
   
 
 function tipo (letra) {
@@ -71,7 +107,7 @@ function tipo (letra) {
 	} else if (letra=="+" || letra=="-" || letra==")" || letra=="(" || letra=="*" || letra=="/" || letra=="^") {
 		return 2;
 	}
-	else if(letra=="x" || letra=="-x"){
+	else if(letra=="x" || letra=="-x"|| letra=="$"|| letra=="-$"){
 		return 3;
 	}
 	else {
@@ -97,3 +133,21 @@ function poner_stack(n){
 }
 
 
+/*
+
+    	switch (f) {
+    		case -1:
+    			return y;
+    			break;
+    		case 0:
+    			return Math.sqrt(y);
+    			break;
+    	}
+
+
+
+    	for (var i = 0; i < FA[n].length; i++) {
+    	if( isArray(FA[n][i]) ){  var w= parseInt(FA[n][i][0]); FA[n][i].shift(); FA[n][i]=funcion( FA[n][i] );  }
+    }
+   
+*/

@@ -26,33 +26,54 @@ var F= new Array();
 // funciones
 function funcion(x, n){
 
-	var v1, v2, r;
+	var v1, v2, r= new Array();
 	var cola= new Array();
 	
-	var t=0;
-	var y=0;
+	
     var h=0.000001;
-    var bool=false;
+   
      
 	if(Math.abs(x)>h && FA.length>0)
 	{
-         
-		cola=FA[n].slice();
-		// if(FA.length==4){ alert("hola"+n); }
-		while (cola.length!=1) {
+	    
+	    	r=FA[n]=parser(F[n]);
+	    	   
+         return resolver(x,r, -1);
+
+	} else { return NaN }
+}
+
+function resolver(x, col, f) {
+//	alert(col+" "+f);
+var bool=false;
+	//alert("x="+x+" FA[n]="+FA[0]);
+	var t=0, y=0, v1, v2, r;
+   // alert("cola="+cola+" f="+f);
+	for (var i = 0; i < col.length; i++) {
+		//alert("hola0 "+Array.isArray(cola[i]));
+    
+    	if(Array.isArray(col[i]) && col[i].length!=1){ 
+    		if(col[i].length==1){  }
+    		else{ var w= parseInt(col[i][0]) ; col[i].shift();  var hola= ""+resolver(x, col[i].slice(), w);  if(hola=="NaN"){col[i]="";   return NaN }else{col[i].join(''); col[i]=hola; }   }
+    	}
+    }
+   
+   
+
+   while (col.length!=1) {
 			//alert("z "+x+" "+cola.length+" "+t+" "+cola[t]+" "+cola[1+t]+" "+cola[2+t]+" "+(!isNaN(cola[0+t]) || tipo(cola[0+t])==3) +" "+ (tipo(cola[1+t])==1 || tipo(cola[1+t])==3) +" "+ (tipo(cola[2+t])==2 ));
-	        if( (!isNaN(cola[0+t]) || tipo(cola[0+t])==3) && (!isNaN(cola[1+t]) || tipo(cola[1+t])==3) && (tipo(cola[2+t])==2 ) ){
-	        	if(cola[0+t]=="x"){ v1=x;  }else if(cola[0+t]=="-x"){v1=-x;}else{ v1=parseFloat(cola[0+t]);  }
-	        	if(cola[1+t]=="x"){ v2=x;  }else if(cola[1+t]=="-x"){v1=-x;}else{ v2=parseFloat(cola[1+t]);  }
+	        if( (!isNaN(col[0+t]) || tipo(col[0+t])==3) && (!isNaN(col[1+t]) || tipo(col[1+t])==3) && (tipo(col[2+t])==2 ) ){
+	        	if(col[0+t]=="x"){ v1=x;  }else if(col[0+t]=="-x"){v1=(x*-1); }else{ v1=parseFloat(col[0+t]);  }
+	        	if(col[1+t]=="x"){ v2=x;  }else if(col[1+t]=="-x"){v2=(x*-1); }else{ v2=parseFloat(col[1+t]);  }
                 
-                if(cola[2+t]=="+"){  r=""+(v1+v2);  }
-                if(cola[2+t]=="-"){  r=""+(v1-v2);  }
-                if(cola[2+t]=="*"){  r=""+(v1*v2);  }
-                if(cola[2+t]=="/"){  r=""+(v1/v2); }
-                if(cola[2+t]=="^"){  r=""+(Math.pow(v1, v2));  }
+                if(col[2+t]=="+"){  r=""+(v1+v2);  }
+                if(col[2+t]=="-"){  r=""+(v1-v2);  }
+                if(col[2+t]=="*"){  r=""+(v1*v2);  }
+                if(col[2+t]=="/"){  r=""+(v1/v2); }
+                if(col[2+t]=="^"){  r=""+(Math.pow(v1, v2));  }
               //  if(t==1){ alert("w " +v1+" "+v2+" "+r); }
                // for(var i=0; i<cola.length; i++){ alert("w "+cola[i]);  }
-              cola.splice(t,3, r);    t=0;
+              col.splice(t,3, r);    t=0;
                // for(var i=0; i<cola.length; i++){ alert("y "+cola[i]);  }
                 if(isNaN(r)){ return NaN; }
 	        }else {
@@ -61,11 +82,21 @@ function funcion(x, n){
 
 		}
 
-        if(cola.length==1){ if(cola[0]=="x"){ y=x;  }else if(cola[0]=="-x"){ y=-x }else{ y=parseFloat(cola[0]);}   }
+        if(col.length==1){ if(col[0]=="x"){ y=x;  }else if(col[0]=="-x"){ y=-x }else{ y=parseFloat(col[0]);}   }
+
+ 	//alert("hola "+col);
+		
+    	switch (f) {
+    		case -1:
+    			 return y; 
+    			break;
+    		case 0:
+    			 return Math.sqrt(y);
+    			break;
+    	}
 
 
-		return y;
-	} else { return NaN }
+
 }
 // x=coordena real X1=coordenada cartesiana 
 function XtoX1(b, x){
@@ -163,7 +194,7 @@ p.addEventListener("mouseup", function (){
 	try {
 		let c= p.cloneNode(true);
 		p.parentNode.replaceChild(c, p);
-		centradox-=distanciax; centradoy-=distanciay;	click=false;  info.innerHTML=""+click; centradox=Math.round(centradox), centradoy=Math.round(centradoy);
+		centradox-=distanciax; centradoy-=distanciay;	click=false;  info.innerHTML=""+click; centradox=Math.round(centradox*10)/10, centradoy=Math.round(centradoy*10)/10;
 		comenzar();
 
 	} catch(e) {
@@ -293,7 +324,7 @@ function fijar_escala(){
 function fijar_calidad(){
 	var calidad= document.getElementById("calidad");
 	if(calidad.value>0 && calidad.value<21){
-		definicion=parseFloat(calidad.value)*100;
+		definicion=parseFloat(calidad.value)*25;
 	    comenzar();
     }
 }
@@ -326,7 +357,7 @@ function dibujar()
 	    
 		y=y1=y2= new Array();
 
-		if(escala>100){exactitud=0.1}
+		if(escala>100){exactitud=0.5}
 		else{ exactitud=escala/definicion }
 
 		//dibujar funcion
@@ -355,27 +386,38 @@ function dibujar()
 				lienzo.lineJoin="miter";			
 			    y1[h]=funcion(x1,h);
 
-			    if(y1[h]!=NaN){
+			    if(y1[h]!=NaN && y1[h]<100000){
 	           
 					y2[h]=YtoY1(false, (y1[h]-centradoy));			   
 					Y[h][n1]=y2[h];
-				   
-					if(n1>0)
-				    { 
-				    	var dx= x2-X[n1-1], dy=y2[h]-Y[h][n1-1];// if(h==0 && n_funciones==2){ alert("x2="+x2+" dy="+dy+" y2="+y2+" "+Y[h][n1-1]); }
-						if(Math.sqrt(dx*dx+dy*dy)>1 && Math.sqrt(dx*dx+dy*dy)<alto-10)
-						{
-	                    
+				    if((y2[h]<alto && y2[h]>0) || (Y[h][n1-1]<alto && Y[h][n1-1]>0)){
+						if(n1>0)
+					    { 
+					    	var dx= exactitud, dy=y2[h]-Y[h][n1-1];// if(h==0 && n_funciones==2){ alert("x2="+x2+" dy="+dy+" y2="+y2+" "+Y[h][n1-1]); }
+					    	var dd=Math.sqrt(dx*dx+dy*dy);
+							if(dd>3)
+							{
+		                    
+	                        //  alert(dd+" "+exactitud);
+							//	alert(Math.sqrt(dx*dx+dy*dy));
+							//	alert(X[n1-1]+" "+Y[h][n1-1]);
+							   
+						    	var ddx=(dx/dd);
+						    	var ddy=(dy/dd);
+						    	//alert(ddx+" "+ddy+" "+dd+" "+y2[h]+" "+Y[h][n1-1]+" "+x1);
+						    	for (var j = 0; j < dd-1; j++) {
 
-						//	alert(Math.sqrt(dx*dx+dy*dy));
-						//	alert(X[n1-1]+" "+Y[h][n1-1]);
-						    lienzo.moveTo(X[n1-1],Y[h][n1-1]);
-					    	lienzo.lineTo(x2+1,y2[h]+1);
+						        	lienzo.moveTo(X[n1-1]+ddx*j,Y[h][n1-1]+ddy*j+ddy);
+						        	lienzo.lineTo(X[n1-1]+ddx*j,Y[h][n1-1]+ddy*j);
+						    	}
+						    }else {
+						    	lienzo.moveTo(x2,y2[h]);
+								lienzo.lineTo(x2+1,y2[h]+1);
+						    }
 					    }
-				    }
-							    
-					lienzo.moveTo(x2,y2[h]);
-					lienzo.lineTo(x2+1,y2[h]+1);
+								    
+						
+					}
 				}
 
 				lienzo.stroke();
@@ -486,48 +528,105 @@ function latex1 (e) {
 }
 
 function LaTex(F){
-var l, espacios="";
-l=new Array();
+	var l, espacios="", bu=0;
+	l=new Array();
+
 	for (var i = 0; i < F.length; i++) {
     l[0]=F.charAt(i);
 		if(l[0]==" "){continue;}
-		if(l[0]=="("){ l[0]="{";  }
-		if(l[0]==")"){ l[0]="}";  }
+		if(l[0]=="("){ l[0]="{(";   }
+		if(l[0]==")"){ l[0]=")}";  }
 		espacios+=l[0];		
 	}
     F=espacios;
-   
-	for (var i = 0; i < F.length; i++) {
 
-    l[i]=F.charAt(i); 
-  
-    if(l[i]=="/"){
-    	alert("hola1");
-    	var si=1,sd=1,  cli=1, cld=1, li="", ld="";
-    	if(l[i-1]=="}"){alert("hola2");
-       		for(var h=i-2; h>=0; h--){ if(l[h]=="}"){ si++; } if(l[h]=="{"){si--;}    cli++; if(si<=0){ alert("1li="+li); break; } li+=l[h];  }
-    	}else {cli=0; alert("hola3 "+i);
-       		for(var h=i-1; h>=0; h--){ if(!isNaN(l[h]) || tipo(l[h])==3 ){ cli++; li+=l[h]; }else{  alert("2li="+li); break; }  }
-    	}
-        
-        if(F.charAt(i+1)=="{"){alert("hola4");
-       		for(var h=i+2; h<F.length; h++){ if(F.charAt(h)=="{"){ sd++; } if(F.charAt(h)=="}"){sd--;}    cld++;  alert("sd="+sd+" h="+h+" l[h]="+F.charAt(h)); if(sd<=0){ alert("1ld="+ld); break; } ld+=F.charAt(h);  }
-    	}else {cld=0; alert("hola5 "+i);
-       		for(var h=i+1; h<F.length; h++){ if(!isNaN(F.charAt(h)) || tipo(F.charAt(h))==3 ){ cld++; ld+=F.charAt(h); }else{  alert("2ld="+ld); break; }  }
-    	}
-
-    var r=" \\frac{"+li.split('').reverse().join('')+"}{"+ld+"} ";
-   var R= new Array();
-   R=F.split('');
-   R.splice(i-cli, 1+cld+cli, r);
-   F=R.join('');
-    
-    i+= (-(cli+1) + r.length); 
-     alert("r="+r+" F="+F+" i="+i+" cli="+cli+" cld="+cld+" r.length="+r.length);
+   while (F.indexOf("sqrt",bu)!=-1 && F!="") {
+   			var i=parseFloat(F.indexOf("sqrt")), s=1;
+   	       
+	        var hola= new Array();
+	        hola=F.slice().split('');
+	       // alert("hola2 "+hola);
+	        hola.splice(i,0,"{\\");
+	     
+	        hola[i+6]="";
+	       
+            bu=i+7;  
+	        for(var h=bu; h<hola.length; h++){
+	        if(hola[h]=="("){s++; }
+	        if(hola[h]==")"){s--;}
+	        if(s==0){ hola[h]="}";  F=hola.join('');  break;  }
+	        }        
     }
 
-			
+
+   for (var i = 0; i < F.length; i++) {
+    l[i]=F.charAt(i); 
+  
+	    if(l[i]=="^"){
+	    	var si=1,sd=1,  cli=1, cld=1, li="", ld="";
+
+	    	if(l[i-1]=="}"){
+
+	       		for(var h=i-2; h>=0; h--){ if(l[h]=="}"){ si++; } if(l[h]=="{"){si--;}    cli++; if(si<=0){ alert("1li="+li); break; } li+=l[h];  }
+
+	    	}else {
+
+	    		cli=0;
+	       		for(var h=i-1; h>=0; h--){ if(!isNaN(l[h]) || tipo(l[h])==3 ){ cli++; li+=l[h]; }else{  alert("2li="+li); break; }  }
+	    	}
+	        
+	        if(F.charAt(i+1)=="{"){
+	       		for(var h=i+2; h<F.length; h++){ if(F.charAt(h)=="{"){ sd++; } if(F.charAt(h)=="}"){sd--;}    cld++;  if(sd<=0){ break; } ld+=F.charAt(h);  }
+	    	}else {cld=0; 
+	       		for(var h=i+1; h<F.length; h++){ if(!isNaN(F.charAt(h)) || tipo(F.charAt(h))==3 ){ cld++; ld+=F.charAt(h); }else{   break; }  }
+	    	}
+		   
+		   var R= new Array();
+		   R=F.split('');
+		   R.splice(i-cli, 0, "{{");
+		   R.splice(i+1, 0, "}");
+		   R.splice(i+3, 0, "{");
+		   R.splice(i+cld+4, 0, "}}");
+		   F=R.join('');
+	      // alert("F="+F+" i="+i+" cli="+cli+" cld="+cld);
+	       i+=5;
+	    }		
 	}
+   
+
+	for (var i = 0; i < F.length; i++) {
+     
+  
+	    if(F.charAt(i)=="/"){
+	    	var si=1,sd=1,  cli=1, cld=1, li="", ld="";
+
+	    	if(F.charAt(i-1)=="}"){
+
+	       		for(var h=i-2; h>=0; h--){ if(F.charAt(h)=="}"){ si++; } if(F.charAt(h)=="{"){si--;}    cli++; if(si<=0){  break; } li+=F.charAt(h);  }
+
+	    	}else {
+
+	    		cli=0;
+	       		for(var h=i-1; h>=0; h--){ if(!isNaN(F.charAt(h)) || tipo(F.charAt(h))==3 ){ cli++; li+=F.charAt(h); }else{   break; }  }
+	    	}
+	        
+	        if(F.charAt(i+1)=="{"){
+	       		for(var h=i+2; h<F.length; h++){ if(F.charAt(h)=="{"){ sd++; } if(F.charAt(h)=="}"){sd--;}    cld++;  if(sd<=0){  break; } ld+=F.charAt(h);  }
+	    	}else {cld=0; 
+	       		for(var h=i+1; h<F.length; h++){ if(!isNaN(F.charAt(h)) || tipo(F.charAt(h))==3 ){ cld++; ld+=F.charAt(h); }else{  break; }  }
+	    	}
+		   var r="{\\frac{"+li.split('').reverse().join('')+"}{"+ld+"}}";
+		   var R= new Array();
+		   R=F.split('');
+		   R.splice(i-cli, 1+cld+cli, r);
+		   F=R.join('');
+	    
+	   	   i+= (-(cli+1) + r.length); 
+	  //  alert("r="+r+" F="+F+" i="+i+" cli="+cli+" cld="+cld+" r.length="+r.length);
+	    }		
+	}
+
+
     espacios="";
 	for (var i = 0; i < F.length; i++) {
     l[0]=F.charAt(i);
