@@ -44,54 +44,71 @@ function funcion(x, n){
 }
 
 function resolver(x, col, f) {
-//	alert(col+" "+f);
-var bool=false;
+	var e=Math.E, pi=Math.PI;
+
+	//	alert(col+" "+f);
+	var bool=false;
 	//alert("x="+x+" FA[n]="+FA[0]);
 	var t=0, y=0, v1, v2, r;
-   // alert("cola="+cola+" f="+f);
+	// alert("cola="+cola+" f="+f);
 	for (var i = 0; i < col.length; i++) {
-		//alert("hola0 "+Array.isArray(cola[i]));
-    
+	//alert("hola0 "+Array.isArray(cola[i]));
     	if(Array.isArray(col[i]) && col[i].length!=1){ 
-    		if(col[i].length==1){  }
-    		else{ var w= parseInt(col[i][0]) ; col[i].shift();  var hola= ""+resolver(x, col[i].slice(), w);  if(hola=="NaN"){col[i]="";   return NaN }else{col[i].join(''); col[i]=hola; }   }
+    		var w= parseInt(col[i][0]) ; col[i].shift();  var hola= ""+resolver(x, col[i].slice(), w);  
+    		if(hola=="NaN"){col[i]="";   return NaN }else{col[i].join(''); col[i]=hola; }   
     	}
-    }
-   
+	}
+	   
    
 
    while (col.length!=1) {
 			//alert("z "+x+" "+cola.length+" "+t+" "+cola[t]+" "+cola[1+t]+" "+cola[2+t]+" "+(!isNaN(cola[0+t]) || tipo(cola[0+t])==3) +" "+ (tipo(cola[1+t])==1 || tipo(cola[1+t])==3) +" "+ (tipo(cola[2+t])==2 ));
-	        if( (!isNaN(col[0+t]) || tipo(col[0+t])==3) && (!isNaN(col[1+t]) || tipo(col[1+t])==3) && (tipo(col[2+t])==2 ) ){
-	        	if(col[0+t]=="x"){ v1=x;  }else if(col[0+t]=="-x"){v1=(x*-1); }else{ v1=parseFloat(col[0+t]);  }
-	        	if(col[1+t]=="x"){ v2=x;  }else if(col[1+t]=="-x"){v2=(x*-1); }else{ v2=parseFloat(col[1+t]);  }
-                
-                if(col[2+t]=="+"){  r=""+(v1+v2);  }
-                if(col[2+t]=="-"){  r=""+(v1-v2);  }
-                if(col[2+t]=="*"){  r=""+(v1*v2);  }
-                if(col[2+t]=="/"){  r=""+(v1/v2); }
-                if(col[2+t]=="^"){  r=""+(Math.pow(v1, v2));  }
-              //  if(t==1){ alert("w " +v1+" "+v2+" "+r); }
-               // for(var i=0; i<cola.length; i++){ alert("w "+cola[i]);  }
-              col.splice(t,3, r);    t=0;
-               // for(var i=0; i<cola.length; i++){ alert("y "+cola[i]);  }
-                if(isNaN(r)){ return NaN; }
-	        }else {
-	        	t++;
-	        }
+        if( (!isNaN(col[0+t]) || tipo(col[0+t])==3) && (!isNaN(col[1+t]) || tipo(col[1+t])==3) && (tipo(col[2+t])==2 ) ){
+        	if(col[0+t]=="x"){ v1=x;  }else if(col[0+t]=="-x"){v1=(x*-1); }else if(col[0+t]=="e"){ v1=e;  }else if(col[0+t]=="-e"){v1=(e*-1); }else if(col[0+t]=="π"){ v1=pi;  }else if(col[0+t]=="-π"){v1=(pi*-1); }else{ v1=parseFloat(col[0+t]);  }
+        	if(col[1+t]=="x"){ v2=x;  }else if(col[1+t]=="-x"){v2=(x*-1); }else if(col[1+t]=="e"){ v2=e;  }else if(col[1+t]=="-e"){v2=(e*-1); }else if(col[1+t]=="π"){ v2=pi;  }else if(col[1+t]=="-π"){v2=(pi*-1); }else{ v2=parseFloat(col[1+t]);  }
+            
+            if(col[2+t]=="+"){  r=""+(v1+v2);  }
+            if(col[2+t]=="-"){  r=""+(v1-v2);  }
+            if(col[2+t]=="*"){  r=""+(v1*v2);  }
+            if(col[2+t]=="/"){  r=""+(v1/v2); }
+            if(col[2+t]=="^"){  r=""+(Math.pow(v1, v2));  }
+            //  if(t==1){ alert("w " +v1+" "+v2+" "+r); }
+            // for(var i=0; i<cola.length; i++){ alert("w "+cola[i]);  }
+            col.splice(t,3, r);    t=0;
+            // for(var i=0; i<cola.length; i++){ alert("y "+cola[i]);  }
+            if(isNaN(r)){ return NaN; }
 
-		}
+        }else {
+        	t++;
+        }
 
-        if(col.length==1){ if(col[0]=="x"){ y=x;  }else if(col[0]=="-x"){ y=-x }else{ y=parseFloat(col[0]);}   }
+	}
+
+        if(col.length==1){ if(col[0]=="x"){ y=x;  }else if(col[0]=="-x"){ y=-x }else if(col[0]=="e"){ y=e;  }else if(col[0]=="-e"){y=(e*-1); }else if(col[0]=="π"){ y=pi;  }else if(col[0]=="-π"){y=(pi*-1); }else{ y=parseFloat(col[0]);}   }
 
  	//alert("hola "+col);
 		
     	switch (f) {
     		case -1:
-    			 return y; 
+    			return y; 
     			break;
     		case 0:
-    			 return Math.sqrt(y);
+    			return Math.sqrt(y);
+    			break;
+    		case 1: 
+    			return Math.sin(y);
+    			break;
+    		case 2: 
+    			return Math.sin(y);
+    			break;
+    		case 3: 
+    			return Math.cos(y);
+    			break;
+    		case 4: 
+    			return Math.tan(y);
+    			break;
+    		case 5:
+    			return Math.log(y)/Math.LN10;
     			break;
     	}
 
@@ -438,6 +455,7 @@ function dibujar()
 }
 // fin dibujar funcion
 function dibujar_punto(x, n){
+	/*
 var p= document.getElementById("p");
 var pctx=p.getContext("2d");
 pctx.beginPath();
@@ -446,7 +464,7 @@ pctx.arc(XtoX1(false, x-centradox),YtoY1(false, funcion(x, n)-centradoy), 4, 0, 
 pctx.fillStyle="#E46BAA";
 pctx.fill();
 pctx.stroke();
-
+*/
 }
 
 function agregar_funcion(){

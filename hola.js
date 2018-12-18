@@ -35,11 +35,28 @@ function parser (F1) {
         var f_especial= new Array();
         var NF= new Array();
 
-        while (F1.indexOf("sqrt(")!=-1 && F1!="") {
+        while ((F1.indexOf("sqrt(")!=-1 || F1.indexOf("sen(")!=-1 || F1.indexOf("sin(")!=-1 || F1.indexOf("cos(")!=-1 ||F1.indexOf("tan(")!=-1 || F1.indexOf("log(")!=-1) && F1!="") {
 	        f_especial[0]=F1.indexOf("sqrt(");
+	        f_especial[1]=F1.indexOf("sen(");
+	        f_especial[2]=F1.indexOf("sin(");
+	        f_especial[3]=F1.indexOf("cos(");
+	        f_especial[4]=F1.indexOf("tan(");
+	        f_especial[5]=F1.indexOf("log(");
 
-	        var i=parseFloat(f_especial[0]), nf=0, cadena="", s=1;
+            var i, nf=0, cadena="", s=1;
+
+            while (f_especial[nf]==-1 && nf<=f_especial.length) {
+            	nf++;
+            }
+            
+	        for(var h=0; h<f_especial.length; h++){
+            	if(f_especial[nf]>f_especial[h] && f_especial[h]!=-1){ nf=h;  }
+	        }
+            
+            i=f_especial[nf];
+	       
 	        if(nf==0){var hola=F1.split('');   hola.splice(i, 4); F1=hola.join('');  }
+	        if(nf==1 || nf==2 || nf==3 || nf==4|| nf==5){var hola=F1.split('');   hola.splice(i, 3); F1=hola.join('');  }
 
 	        for(var h=i+1; h<F1.length; h++){
 	        if(F1.charAt(h)=="("){s++;}
@@ -50,7 +67,7 @@ function parser (F1) {
 	        }
 	         cola= new Array();
 	         stack= new Array();
-	    //  alert("hola "+cadena+" nf="+nf+" F1="+F1+" i="+i+" NF="+NF+" cola="+cola);      
+	    	// alert("hola "+cadena+" nf="+nf+" F1="+F1+" i="+i+" NF="+NF+" cola="+cola);      
        }
 
        v=0;
@@ -96,7 +113,7 @@ function parser (F1) {
         }
 
         }
-    //alert("cola="+cola+" F1="+F1);
+    	//alert("cola="+cola+" F1="+F1);
 	    return cola; 
 }
   
@@ -107,7 +124,7 @@ function tipo (letra) {
 	} else if (letra=="+" || letra=="-" || letra==")" || letra=="(" || letra=="*" || letra=="/" || letra=="^") {
 		return 2;
 	}
-	else if(letra=="x" || letra=="-x"|| letra=="$"|| letra=="-$"){
+	else if(letra=="x" || letra=="-x"|| letra=="$"|| letra=="-$" || letra=="e" || letra=="-e"|| letra=="π"|| letra=="-π"){
 		return 3;
 	}
 	else {
